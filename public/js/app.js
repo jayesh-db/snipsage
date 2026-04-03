@@ -2,7 +2,11 @@
    SnipSage Dashboard — Main Application
    ============================================================ */
 
-const API = 'http://localhost:3000/api';
+/**
+ * API base URL — uses relative path so it automatically works on both
+ * localhost (development) and Vercel (production).
+ */
+const API = '/api';
 
 // ============================================================
 // State
