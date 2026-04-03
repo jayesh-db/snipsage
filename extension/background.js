@@ -2,7 +2,17 @@
    SnipSage — Background Service Worker (Manifest V3)
    ============================================================ */
 
-const API_BASE = 'http://localhost:3000/api';
+/**
+ * API base URL — update SNIPSAGE_API_URL to your Vercel deployment URL.
+ *
+ * After your first Vercel deploy, replace the value below with:
+ *   https://<your-project>.vercel.app/api
+ *
+ * For local development, temporarily change it to:
+ *   http://localhost:3000/api
+ */
+const SNIPSAGE_API_URL = 'https://snipsage.vercel.app/api'; // ← UPDATE AFTER FIRST DEPLOY
+const API_BASE = SNIPSAGE_API_URL;
 
 // Create context menu on install
 chrome.runtime.onInstalled.addListener(() => {
@@ -19,9 +29,20 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     const { token } = await chrome.storage.local.get('token');
 
     if (!token) {
-      // Notify user to log in
+      // Notify user to log in via badge
       chrome.action.setBadgeText({ text: '!' });
       chrome.action.setBadgeBackgroundColor({ color: '#EF4444' });
+      setTimeout(() => chrome.action.setBadgeText({ text: '' }), 3000);
+
+      // Show toast notification on the page
+      if (tab?.id) {
+        chrome.tabs.sendMessage(tab.id, {
+          type: 'SNIPSAGE_SAVE_RESULT',
+          success: false,
+          message: 'Please click the extension icon to log in first.',
+        }).catch(() => { });
+      }
+
       return;
     }
 
@@ -56,7 +77,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
             type: 'SNIPSAGE_SAVE_RESULT',
             success: true,
             message: 'Content saved to SnipSage!',
-          }).catch(() => {});
+          }).catch(() => { });
         }
       } else {
         throw new Error(data.message);

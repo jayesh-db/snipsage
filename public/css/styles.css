@@ -210,7 +210,7 @@ a:hover { text-decoration: underline; }
 
 .input-wrapper input {
   width: 100%;
-  padding: 12px 14px 12px 42px;
+  padding: 12px 42px 12px 42px;
   border: 1.5px solid var(--border);
   border-radius: 11px;
   background: rgba(255, 255, 255, 0.03);
@@ -234,6 +234,32 @@ a:hover { text-decoration: underline; }
 
 .input-wrapper input::placeholder {
   color: var(--text-muted);
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.btn-toggle-password:hover {
+  color: var(--text-primary);
+}
+
+.btn-toggle-password svg {
+  width: 18px;
+  height: 18px;
 }
 
 .btn-auth {

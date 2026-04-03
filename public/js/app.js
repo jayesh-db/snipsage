@@ -59,6 +59,25 @@ function showDashboard() {
 }
 
 function initAuthEvents() {
+  // Password visibility toggle
+  document.querySelectorAll('.btn-toggle-password').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const input = e.currentTarget.parentElement.querySelector('input');
+      const iconPaths = {
+        hide: `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`,
+        show: `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
+      };
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        e.currentTarget.querySelector('svg').innerHTML = iconPaths.show;
+      } else {
+        input.type = 'password';
+        e.currentTarget.querySelector('svg').innerHTML = iconPaths.hide;
+      }
+    });
+  });
+
   // Tab switching
   document.getElementById('loginTab').addEventListener('click', () => {
     document.getElementById('loginTab').classList.add('active');
@@ -66,6 +85,8 @@ function initAuthEvents() {
     document.getElementById('loginForm').style.display = 'flex';
     document.getElementById('signupFormDashboard').style.display = 'none';
     hideAuthError();
+    document.getElementById('loginForm').reset();
+    document.getElementById('signupFormDashboard').reset();
   });
 
   document.getElementById('signupTab').addEventListener('click', () => {
@@ -74,6 +95,8 @@ function initAuthEvents() {
     document.getElementById('signupFormDashboard').style.display = 'flex';
     document.getElementById('loginForm').style.display = 'none';
     hideAuthError();
+    document.getElementById('loginForm').reset();
+    document.getElementById('signupFormDashboard').reset();
   });
 
   // Login
@@ -99,6 +122,8 @@ function initAuthEvents() {
         state.user = data.data.user;
         localStorage.setItem('snipsage_token', state.token);
         localStorage.setItem('snipsage_user', JSON.stringify(state.user));
+        document.getElementById('loginForm').reset();
+        document.getElementById('signupFormDashboard').reset();
         showDashboard();
       } else {
         showAuthError(data.message || 'Login failed.');
@@ -135,6 +160,8 @@ function initAuthEvents() {
         state.user = data.data.user;
         localStorage.setItem('snipsage_token', state.token);
         localStorage.setItem('snipsage_user', JSON.stringify(state.user));
+        document.getElementById('loginForm').reset();
+        document.getElementById('signupFormDashboard').reset();
         showDashboard();
       } else {
         showAuthError(data.message || 'Signup failed.');
