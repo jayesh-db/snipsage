@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SnipSage — Your AI-Powered Personal Knowledge Assistant. Capture web content, build your knowledge base, and chat with AI.">
+  <title>SnipSage — AI Knowledge Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ====== AUTH PAGE ====== -->
+    <div id="authPage" class="page auth-page">
+      <div class="auth-container">
+        <div class="auth-brand">
+          <div class="brand-icon">✨</div>
+          <h1 class="brand-name">SnipSage</h1>
+          <p class="brand-tagline">Your AI-Powered Knowledge Assistant</p>
+        </div>
+
+        <div class="auth-card glass-card">
+          <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login" id="loginTab">Sign In</button>
+            <button class="auth-tab" data-tab="signup" id="signupTab">Create Account</button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm" class="auth-form">
+            <div class="form-field">
+              <label for="loginEmail">Email Address</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <input type="email" id="authLoginEmail" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="loginPassword">Password</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" id="authLoginPassword" placeholder="Enter your password" required>
+              </div>
+            </div>
+            <button type="submit" class="btn-auth" id="authLoginBtn">
+              <span class="btn-text">Sign In</span>
+              <div class="btn-spinner"></div>
+            </button>
+          </form>
+
+          <!-- Signup Form -->
+          <form id="signupFormDashboard" class="auth-form" style="display:none;">
+            <div class="form-field">
+              <label for="signupName">Full Name</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input type="text" id="authSignupName" placeholder="Your full name" required>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="signupEmail">Email Address</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <input type="email" id="authSignupEmail" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="signupPassword">Password</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" id="authSignupPassword" placeholder="Min 6 characters" required minlength="6">
+              </div>
+            </div>
+            <button type="submit" class="btn-auth" id="authSignupBtn">
+              <span class="btn-text">Create Account</span>
+              <div class="btn-spinner"></div>
+            </button>
+          </form>
+
+          <div id="authError" class="auth-error" style="display:none;"></div>
+        </div>
+
+        <div class="auth-footer">
+          <p>Capture knowledge. Build insights. Chat with AI.</p>
+        </div>
+      </div>
+
+      <!-- Animated background -->
+      <div class="auth-bg-shapes">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+      </div>
+    </div>
+
+    <!-- ====== DASHBOARD LAYOUT ====== -->
+    <div id="dashboardPage" class="page dashboard-page" style="display:none;">
+      <!-- Sidebar -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">✨</span>
+            <span class="sidebar-logo-text">SnipSage</span>
+          </div>
+        </div>
+
+        <div class="sidebar-nav">
+          <button class="nav-item active" data-view="knowledge" id="navKnowledge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Knowledge Base</span>
+          </button>
+          
+          <div class="nav-chat-group">
+            <div class="nav-chat-header">
+              <button class="nav-item" data-view="chat" id="navChat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>AI Chat</span>
+              </button>
+              <button class="btn-sidebar-new-chat" id="newChatBtnHistory" title="New Chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div class="sidebar-chat-history" id="chatHistoryList" style="display:none;">
+              <div class="chat-history-empty">
+                <span>💬</span>
+                <p>No conversations yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="user-profile" id="userProfile">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info">
+              <span class="user-name" id="dashUserName">User</span>
+              <span class="user-email" id="dashUserEmail">user@email.com</span>
+            </div>
+          </div>
+          <button class="nav-item logout-btn" id="dashLogoutBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Mobile Top Bar -->
+      <div class="mobile-topbar" id="mobileTopbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="mobile-title">✨ SnipSage</span>
+      </div>
+
+      <!-- Main Content Area -->
+      <main class="main-content" id="mainContent">
+
+        <!-- ====== KNOWLEDGE BASE VIEW ====== -->
+        <div id="knowledgeView" class="view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Knowledge Base</h2>
+              <p class="view-subtitle">Your collected web snippets and content</p>
+            </div>
+            <div class="view-actions">
+              <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="searchInput" placeholder="Search your knowledge..." class="search-input">
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="stats-row" id="statsRow">
+            <div class="stat-card glass-card">
+              <div class="stat-icon stat-icon-total">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="totalSnips">0</span>
+                <span class="stat-label">Total Snippets</span>
+              </div>
+            </div>
+            <div class="stat-card glass-card">
+              <div class="stat-icon stat-icon-sources">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="totalSources">0</span>
+                <span class="stat-label">Unique Sources</span>
+              </div>
+            </div>
+            <div class="stat-card glass-card">
+              <div class="stat-icon stat-icon-recent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="recentCount">0</span>
+                <span class="stat-label">Last 7 Days</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content List -->
+          <div id="contentList" class="content-list">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">📚</div>
+              <h3>No content saved yet</h3>
+              <p>Use the SnipSage Chrome Extension to start capturing web content.</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div id="pagination" class="pagination" style="display:none;">
+            <button class="pagination-btn" id="prevPageBtn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+            <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+            <button class="pagination-btn" id="nextPageBtn" disabled>
+              Next
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ====== AI CHAT VIEW ====== -->
+        <div id="chatView" class="view" style="display:none;">
+          <div class="chat-layout">
+            <!-- Main Chat Area -->
+            <div class="chat-main-area" style="width: 100%;">
+              <div class="chat-container">
+                <div class="chat-header glass-card">
+                  <div class="chat-header-left">
+                    <div class="chat-header-info">
+                      <div class="chat-ai-avatar">🤖</div>
+                      <div>
+                        <h3>SnipSage AI</h3>
+                        <p>Ask anything about your saved content</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn-new-chat" id="newChatBtn" title="New Conversation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>New Chat</span>
+                  </button>
+                </div>
+
+                <!-- Snippet-Scoped Banner (hidden by default) -->
+                <div class="snippet-chat-banner" id="snippetChatBanner" style="display:none;">
+                  <div class="snippet-banner-icon">🔒</div>
+                  <div class="snippet-banner-info">
+                    <span class="snippet-banner-label">Scoped to snippet</span>
+                    <span class="snippet-banner-title" id="snippetBannerTitle">Snippet Title</span>
+                    <a class="snippet-banner-url" id="snippetBannerUrl" href="#" target="_blank" rel="noopener"></a>
+                  </div>
+                  <button class="snippet-banner-close" id="snippetBannerClose" title="Exit snippet chat">✕</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                  <div class="chat-welcome">
+                    <div class="welcome-icon">✨</div>
+                    <h3>Welcome to SnipSage AI</h3>
+                    <p>I can answer questions based on the content you've saved. Try asking me about topics from your knowledge base!</p>
+                    <div class="welcome-suggestions">
+                      <button class="suggestion-chip" data-prompt="What topics do I have saved?">📋 What topics do I have saved?</button>
+                      <button class="suggestion-chip" data-prompt="Summarize my recent saves">📝 Summarize my recent saves</button>
+                      <button class="suggestion-chip" data-prompt="What are the key insights from my content?">💡 Key insights from my content</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="chat-input-area">
+                  <div class="chat-input-wrapper glass-card">
+                    <textarea id="chatInput" placeholder="Ask about your saved content..." rows="1"></textarea>
+                    <button class="chat-send-btn" id="chatSendBtn" title="Send message">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                  </div>
+                  <p class="chat-disclaimer">SnipSage AI answers only from your saved content. Responses are grounded in your knowledge base.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
