@@ -2,7 +2,18 @@
    SnipSage Extension Popup — Logic
    ============================================================ */
 
-const API_BASE = 'http://localhost:3000/api';
+/**
+ * API base URL — update SNIPSAGE_API_URL to your Vercel deployment URL.
+ *
+ * After your first Vercel deploy, replace the value below with:
+ *   https://<your-project>.vercel.app/api
+ *
+ * For local development, temporarily change it to:
+ *   http://localhost:3000/api
+ */
+const SNIPSAGE_API_URL = 'https://snipsage.vercel.app/api'; // ← UPDATE AFTER FIRST DEPLOY
+const API_BASE = SNIPSAGE_API_URL;
+
 
 // DOM Elements
 const authSection = document.getElementById('authSection');

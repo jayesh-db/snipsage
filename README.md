@@ -165,6 +165,118 @@ SnipSage/
 - **Extension:** Chrome Manifest V3
 - **Dashboard:** Vanilla HTML/CSS/JS with dark glass UI
 
+## Deployment (Vercel)
+
+SnipSage is deployed as a single Vercel serverless function backed by MongoDB Atlas. The dashboard (`public/`) is served by Vercel's CDN.
+
+### Prerequisites
+
+- MongoDB **Atlas** cluster (M0 free tier works) with your data
+- A [Vercel](https://vercel.com) account connected to your GitHub repo
+
+---
+
+### Step 1 — Create an Atlas Vector Search Index
+
+The production deployment uses `VECTOR_STORE_TYPE=atlas` (stateless, ideal for serverless). You must create a Search index on the `contents` collection **before** first deploy.
+
+1. Open your Atlas cluster → **Search** tab → **+ Create Index**
+2. Select **Atlas Vector Search**, choose the `snipsage` database → `contents` collection
+3. Use **JSON editor** and paste:
+
+```json
+{
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 3072,
+      "similarity": "cosine"
+    },
+    { "type": "filter", "path": "userId" },
+    { "type": "filter", "path": "parentId" },
+    { "type": "filter", "path": "captureType" }
+  ]
+}
+```
+
+4. Name the index **`vector_index`** and click **Create**.
+
+> **Note:** The `gemini-embedding-001` model produces 3072-dimensional vectors.
+
+---
+
+### Step 2 — Connect GitHub to Vercel
+
+1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
+2. Select the `SnipSage` repo
+3. Leave **Framework Preset** as `Other`, **Root Directory** as `./`
+4. Click **Deploy** — it will fail on first run (missing env vars). That's expected.
+
+---
+
+### Step 3 — Add Environment Variables
+
+In Vercel → Project → **Settings → Environment Variables**, add:
+
+| Variable | Value |
+|---|---|
+| `MONGODB_URI` | Your Atlas connection string |
+| `JWT_SECRET` | A strong random string (64+ chars) |
+| `JWT_EXPIRES_IN` | `7d` |
+| `GOOGLE_API_KEY` | Your Google AI API key |
+| `VECTOR_STORE_TYPE` | `atlas` |
+| `ATLAS_VECTOR_SEARCH_INDEX_NAME` | `vector_index` |
+| `NODE_ENV` | `production` |
+
+> Generate a secure JWT secret: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+
+---
+
+### Step 4 — Redeploy
+
+After adding env vars: **Deployments → ⋯ → Redeploy**
+
+Your production URL will be: `https://snipsage-<hash>.vercel.app`
+
+---
+
+### Step 5 — Update Chrome Extension
+
+1. Open `extension/popup.js` and update line:
+   ```js
+   const SNIPSAGE_API_URL = 'https://snipsage-<hash>.vercel.app/api';
+   ```
+2. Go to `chrome://extensions/` → **Reload** the SnipSage extension
+
+---
+
+### Step 6 — Verify Deployment
+
+```bash
+# Health check
+curl https://snipsage-<hash>.vercel.app/api/health
+
+# Expected response:
+# { "success": true, "message": "SnipSage API is running.", ... }
+```
+
+Test the full flow: Sign up → save a snippet via extension → chat with AI.
+
+---
+
+### Local Development After Deploy
+
+No changes needed — `npm run dev` still runs against your local `.env`:
+
+```bash
+# .env stays as-is for local dev
+VECTOR_STORE_TYPE=memory   # or atlas — both work locally
+npm run dev                 # http://localhost:3000
+```
+
+---
+
 ## License
 
 MIT

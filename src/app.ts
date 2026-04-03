@@ -11,14 +11,27 @@ const app = express();
 // Middleware
 // ============================================================
 
+// ── Allowed origins ────────────────────────────────────────
+// Build the list dynamically so no hardcoded production URL is needed.
+const ALLOWED_ORIGINS: (string | RegExp)[] = [
+  // Local development
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  // Chrome Extensions (all extension IDs)
+  /^chrome-extension:\/\//,
+  // Every Vercel preview / production deployment for this project
+  /^https:\/\/[a-zA-Z0-9-]+(\.vercel\.app)$/,
+];
+
+// Optional custom domain (set FRONTEND_URL in Vercel project settings)
+if (process.env.FRONTEND_URL) {
+  ALLOWED_ORIGINS.push(process.env.FRONTEND_URL);
+}
+
 // CORS — allow requests from extension and dashboard
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-      'chrome-extension://*',
-    ],
+    origin: ALLOWED_ORIGINS,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

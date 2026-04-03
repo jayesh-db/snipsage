@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npx nodemon --exec npx ts-node src/server.ts",
     "build": "npx tsc",
+    "vercel-build": "npx tsc --noEmit",
     "start": "node dist/server.js",
     "typecheck": "npx tsc --noEmit"
   },
